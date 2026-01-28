@@ -4,7 +4,7 @@ from pyzbar import pyzbar
 import time
 
 picam2 = Picamera2()
-picam2.configure(picam2.create_still_configuration(main={"size": (640, 640)}))
+picam2.configure(picam2.create_still_configuration(main={"size": (1080, 1080)}))
 picam2.start()
 time.sleep(1)
 
@@ -13,9 +13,9 @@ try:
         frame = picam2.capture_array()
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         barcodes = pyzbar.decode(gray)
-        rotated = cv2.rotate(frame, cv2.ROTATE_90_COUNTERCLOCKWISE)
-        cv2.imwrite("/home/pi/ES_CW1/colour.png", rotated)
-        cv2.imwrite("/home/pi/ES_CW1/grayscale.png", gray)
+        # rotated = cv2.rotate(frame, cv2.ROTATE_90_COUNTERCLOCKWISE)
+        cv2.imwrite("/home/pi/ES_CW1/barcode_scripts/colour.png", frame)
+        cv2.imwrite("/home/pi/ES_CW1/barcode_scripts/grayscale.png", gray)
 
         if len(barcodes) == 0:
             print("No barcodes detected")
