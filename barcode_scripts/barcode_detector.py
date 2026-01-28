@@ -1,3 +1,4 @@
+import sqlite3
 from picamera2 import Picamera2
 import cv2
 from pyzbar import pyzbar
@@ -6,6 +7,9 @@ import time
 picam2 = Picamera2()
 picam2.configure(picam2.create_still_configuration(main={"size": (1080, 1080)}))
 picam2.start()
+DB_FILE = "/home/pi/processed.db"
+conn = sqlite3.connect(DB_FILE)
+cur = conn.cursor()
 time.sleep(1)
 
 try:
@@ -22,10 +26,17 @@ try:
         else:
             for barcode in barcodes:
                 print(barcode.type, barcode.data.decode("utf-8"))
-        time.sleep(1)
+                cur.execute("SELECT name FROM products WHERE code=?", (barcode,))
+                result = cur.fetchone()
+                if result:
+                    print("Product name:", result[0])
+                else:
+                    print("Barcode not found.")
+        time.sleep(0.5)
 
 except KeyboardInterrupt:
     print("Stopping loop \n")
 
 finally:
+    conn.close()
     picam2.stop()

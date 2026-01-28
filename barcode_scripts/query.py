@@ -1,6 +1,7 @@
 import sqlite3
-
 DB_FILE = "C:/Projects/ES/processed.db"
+# DB_FILE = "/home/pi/processed.db"
+
 barcode = "3017620422003"
 
 conn = sqlite3.connect(DB_FILE)
